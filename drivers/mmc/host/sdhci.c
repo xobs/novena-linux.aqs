@@ -898,6 +898,11 @@ static void sdhci_set_transfer_mode(struct sdhci_host *host,
 	u16 mode;
 	struct mmc_data *data = cmd->data;
 
+	/* clear Auto CMD settings for no data CMDs */
+	mode = sdhci_readw(host, SDHCI_TRANSFER_MODE);
+	sdhci_writew(host, mode & ~(SDHCI_TRNS_AUTO_CMD12 |
+			SDHCI_TRNS_AUTO_CMD23), SDHCI_TRANSFER_MODE);
+
 	if (data == NULL)
 		return;
 
