@@ -18,9 +18,9 @@
 	model = "Kosagi Novena (i.MX6 Quad)";
 	/*	compatible = "fsl,imx6q-novena", "fsl,imx6q"; */
 	compatible = "fsl,imx6q-novena", "fsl,imx6q", "fsl,imx6dl"; 
-        chosen {
-                bootargs = "console=ttymxc1,115200 earlyprintk root=/dev/mmcblk0p2 rootwait rootfstype=ext4 ignore_loglevel";
-        };
+	chosen {
+		bootargs = "console=ttymxc1,115200 earlyprintk root=/dev/mmcblk0p2 rootwait rootfstype=ext4 ignore_loglevel";
+	};
 
 	memory {
 		reg = <0x10000000 0x40000000>;
@@ -131,16 +131,20 @@
 		};
 	};
 
-        backlight {
-                compatible = "pwm-backlight";
-                pwms = <&pwm1 0 100000>;
-                brightness-levels = <0 3 6 12 16 24 32 48 64 96 128 192 255>;
-                default-brightness-level = <12>;
+	backlight {
+		compatible = "pwm-backlight";
+		pwms = <&pwm1 0 10000000>;
+
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_backlight_novena>;
+
+		brightness-levels = <0 32 38 48 56 64 96 128 150 192 255>;
+		default-brightness-level = <10>;
 		power-supply = <&reg_lvds_lcd>;
 		status = "okay";
-        };
+	};
 
-        imx-drm {
+	imx-drm {
 		compatible = "fsl,imx-drm";
 		crtcs = <&ipu1 0>, <&ipu1 1>;
 		connectors = <&ldb>;
@@ -197,6 +201,12 @@
 &iomuxc {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_hog>;
+
+	backlight {
+		pinctrl_backlight_novena: backlight-pwm {
+			fsl,pins = <MX6QDL_PAD_DISP0_DAT8__PWM1_OUT 0x1b0b0>;
+		};
+	};
 
 	hog {
 		pinctrl_hog: hoggrp {
@@ -571,12 +581,12 @@
 
 &ldb {
 	status = "okay";
-        lvds-channel@0 {
+	lvds-channel@0 {
 		status = "okay";
 		fsl,data-mapping = "spwg";
 		fsl,data-width = <24>;
 		crtcs = <&ipu1 0>, <&ipu1 1>;
-                display-timings {
+		display-timings {
 			800x480p60 {
 				clock-frequency = <29500000>;
 				hactive = <800>;
@@ -590,8 +600,8 @@
 				hsync-active = <1>;
 				vsync-active = <1>;
 			};
-                };
-        };
+		};
+	};
 };
 
 &hdmi {
