@@ -421,13 +421,10 @@
 			st,fraction-z = <6>;
 			st,i-drive = <1>;
 		};
-/*
-		stmpe_gpio {
-			compatible = "st,stmpe-gpio";
-			gpio-controller;
-			#gpio-cells = <2>;
-		};
-*/
+	};
+	ds1340@68 {
+		compatible = "dallas,ds1340";
+		reg = <0x68>;
 	};
 };
 
